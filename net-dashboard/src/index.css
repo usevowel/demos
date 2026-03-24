@@ -1,0 +1,281 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Cisco Blue Color Palette */
+  --color-cisco-blue: #049FD9;
+  --color-cisco-blue-dark: #005073;
+  --color-cisco-blue-light: #00BCEB;
+  --color-cisco-teal: #6CC04A;
+  
+  /* Status Colors */
+  --color-status-online: #6CC04A;
+  --color-status-warning: #F2B134;
+  --color-status-critical: #E4002B;
+  --color-status-info: #049FD9;
+  
+  /* Dark Theme - Navy Blue Backgrounds */
+  --color-bg-primary: #0D274D;
+  --color-bg-secondary: #1A3A5C;
+  --color-bg-tertiary: #2A4A6C;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #B8C5D6;
+  --color-border: #3A5A7C;
+  
+  /* Base colors for shadcn/ui */
+  --color-background: 13 39% 18%; /* #0D274D */
+  --color-foreground: 210 40% 98%;
+  --color-card: 210 33% 22%; /* #1A3A5C */
+  --color-card-foreground: 210 40% 98%;
+  --color-popover: 210 33% 22%;
+  --color-popover-foreground: 210 40% 98%;
+  --color-primary: 194 97% 44%; /* Cisco blue #049FD9 */
+  --color-primary-foreground: 210 40% 98%;
+  --color-secondary: 210 33% 26%; /* #2A4A6C */
+  --color-secondary-foreground: 210 40% 98%;
+  --color-muted: 210 33% 26%;
+  --color-muted-foreground: 215 20% 65%;
+  --color-accent: 194 97% 44%;
+  --color-accent-foreground: 210 40% 98%;
+  --color-destructive: 0 84% 60%;
+  --color-destructive-foreground: 210 40% 98%;
+  --color-input: 208 28% 35%;
+  --color-ring: 194 97% 44%;
+  --radius: 0.5rem;
+}
+
+/* Light Theme Overrides */
+.light {
+  /* Light Theme - Light Backgrounds */
+  --color-bg-primary: #F5F7FA;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-tertiary: #E8ECF1;
+  --color-text-primary: #1A1F2E;
+  --color-text-secondary: #5A6578;
+  --color-border: #D1D8E0;
+  
+  /* Base colors for shadcn/ui - Light Mode */
+  --color-background: 210 20% 98%;
+  --color-foreground: 210 40% 10%;
+  --color-card: 0 0% 100%;
+  --color-card-foreground: 210 40% 10%;
+  --color-popover: 0 0% 100%;
+  --color-popover-foreground: 210 40% 10%;
+  --color-primary: 194 97% 44%; /* Cisco blue #049FD9 */
+  --color-primary-foreground: 210 40% 98%;
+  --color-secondary: 210 20% 96%;
+  --color-secondary-foreground: 210 40% 10%;
+  --color-muted: 210 20% 96%;
+  --color-muted-foreground: 215 20% 35%;
+  --color-accent: 194 97% 44%;
+  --color-accent-foreground: 210 40% 98%;
+  --color-destructive: 0 84% 60%;
+  --color-destructive-foreground: 210 40% 98%;
+  --color-input: 210 20% 96%;
+  --color-ring: 194 97% 44%;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: Inter, system-ui, sans-serif;
+  }
+  
+  /* OCR-A font for vowel branding */
+  @font-face {
+    font-family: 'OCR-A';
+    src: url('/fonts/OCR-A_Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  .font-ocr-a {
+    font-family: 'OCR-A', monospace;
+  }
+}
+
+/* Custom scrollbar styling - Cisco Blue branding */
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-cisco-blue);
+  border-radius: 6px;
+  border: 2px solid var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cisco-blue-light);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-cisco-blue) var(--color-bg-secondary);
+}
+
+@layer components {
+  /* Status badge colors */
+  .status-online {
+    background-color: var(--color-status-online);
+    color: #1A1F2E !important;
+  }
+  
+  .status-warning {
+    background-color: var(--color-status-warning);
+    color: #1A1F2E !important;
+  }
+  
+  .status-critical {
+    background-color: var(--color-status-critical);
+    color: white;
+  }
+  
+  .status-offline {
+    background-color: rgb(107 114 128);
+    color: white;
+  }
+  
+  /* Device card hover effect */
+  .device-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.2s;
+  }
+  
+  .device-card:hover {
+    border-color: var(--color-cisco-blue);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Cisco blue button */
+  .btn-cisco {
+    background-color: var(--color-cisco-blue);
+    color: white;
+    transition: background-color 0.2s;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .btn-cisco:hover {
+    background-color: var(--color-cisco-blue-light);
+  }
+  
+  /* Utility classes */
+  .bg-bg-primary {
+    background-color: var(--color-bg-primary);
+  }
+  
+  .bg-bg-secondary {
+    background-color: var(--color-bg-secondary);
+  }
+  
+  .bg-bg-tertiary {
+    background-color: var(--color-bg-tertiary);
+  }
+  
+  .text-text-primary {
+    color: var(--color-text-primary);
+  }
+  
+  .text-text-secondary {
+    color: var(--color-text-secondary);
+  }
+  
+  .border-border {
+    border-color: var(--color-border);
+  }
+  
+  .bg-status-online {
+    background-color: var(--color-status-online);
+    color: #1A1F2E !important;
+  }
+  
+  .bg-status-warning {
+    background-color: var(--color-status-warning);
+    color: #1A1F2E !important;
+  }
+  
+  .bg-status-critical {
+    background-color: var(--color-status-critical);
+  }
+  
+  .bg-status-info {
+    background-color: var(--color-status-info);
+  }
+  
+  .text-status-online {
+    color: var(--color-status-online);
+  }
+  
+  .text-status-warning {
+    color: var(--color-status-warning);
+  }
+  
+  .text-status-critical {
+    color: var(--color-status-critical);
+  }
+  
+  .border-cisco-blue {
+    border-color: var(--color-cisco-blue);
+  }
+  
+  .text-cisco-blue {
+    color: var(--color-cisco-blue);
+  }
+  
+  .text-cisco-blue-light {
+    color: var(--color-cisco-blue-light);
+  }
+  
+  .hover\:text-cisco-blue-light:hover {
+    color: var(--color-cisco-blue-light);
+  }
+  
+  /* Voice button glow animations */
+  @keyframes glow-blue {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(4, 159, 217, 0.5), 0 0 10px rgba(4, 159, 217, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(4, 159, 217, 0.8), 0 0 30px rgba(4, 159, 217, 0.5);
+    }
+  }
+  
+  @keyframes glow-white {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  .animate-glow-blue {
+    animation: glow-blue 2s ease-in-out infinite;
+  }
+  
+  .animate-glow-white {
+    animation: glow-white 2s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow-white 2s ease-in-out infinite;
+  }
+}

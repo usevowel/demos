@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* OCR-A font for "vowel" branding */
+@font-face {
+  font-family: 'OCR-A';
+  src: url('/OCR-A_Regular.otf') format('opentype'),
+       local('OCR-A'), local('OCRA'), local('OCR A Std');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar styling - on-brand yellow/orange */
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #facc15; /* yellow-400 */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #fbbf24; /* yellow-500 */
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #facc15 #f3f4f6;
+}
+
+/* Checkbox styling - ensure white background */
+input[type="checkbox"] {
+  background-color: white !important;
+  border: 1px solid #d1d5db !important; /* gray-300 */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #000000 !important; /* black for checked state */
+  border-color: #000000 !important; /* black */
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-3-3a1 1 0 011.414-1.414L5.5 10.086l5.293-5.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+input[type="checkbox"]:focus {
+  outline: 2px solid #eab308 !important; /* yellow-500 */
+  outline-offset: 2px;
+  ring: 2px;
+  ring-color: #eab308;
+}
+
+/* OCR-A font utility class */
+.font-ocr-a {
+  font-family: 'OCR-A', 'OCRA', 'OCR A Std', 'Courier New', monospace;
+  font-weight: normal;
+  letter-spacing: 0.05em;
+}
+
+/* Prominent animated glow effect for powered by vowel buttons */
+@keyframes subtle-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 
+                0 0 20px rgba(255, 255, 255, 0.5), 
+                0 0 30px rgba(255, 255, 255, 0.4),
+                0 0 40px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.9), 
+                0 0 30px rgba(255, 255, 255, 0.7), 
+                0 0 45px rgba(255, 255, 255, 0.5),
+                0 0 60px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.animate-glow {
+  animation: subtle-glow 2s ease-in-out infinite;
+}
+
+/* Yellow animated glow effect for active agent */
+@keyframes yellow-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.6), 0 0 30px rgba(234, 179, 8, 0.4), 0 0 45px rgba(234, 179, 8, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(234, 179, 8, 0.8), 0 0 40px rgba(234, 179, 8, 0.6), 0 0 60px rgba(234, 179, 8, 0.4);
+  }
+}
+
+.animate-yellow-glow {
+  animation: yellow-glow 2s ease-in-out infinite;
+}
