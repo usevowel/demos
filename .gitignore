@@ -1,0 +1,60 @@
+# Environment variables - NEVER commit these
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.staging
+
+# Build artifacts
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# Generated files
+.tanstack/
+src/routeTree.gen.ts
+*.tsbuildinfo
+
+# Dependencies
+node_modules/
+
+# Package manager lock files (users can generate these)
+bun.lockb
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Testing
+*.test.ts.snap
+*.test.tsx.snap
+.coverage/
+coverage/
+.nyc_output/
+
+# Misc
+*.pem
+.cache/
+.temp/
+tmp/
