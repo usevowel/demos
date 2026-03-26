@@ -31,22 +31,15 @@ import { setSelectedTenant } from '@/store/tenantStore'
 import { createNote, getAllNotes, updateNote, deleteNote } from '@/store/notesStore'
 
 /**
- * Toggle to use alternative voice providers.
- * When enabled, can connect to alternative voice APIs.
- * When disabled (default), uses vowel.to's hosted voice service.
- */
-const USE_ALTERNATIVE_PROVIDER = false
-
-let vowelInstance: Vowel | null = null
-
-type VowelChangeListener = (client: Vowel | null) => void
-
-/**
  * VAD Configuration - Use server-side VAD like the auto parts demo
  * Server-side VAD uses AssemblyAI ASR with integrated VAD, which works better
  * on older devices and provides more consistent turn detection.
  */
 const USE_SERVER_VAD = true
+
+let vowelInstance: Vowel | null = null
+
+type VowelChangeListener = (client: Vowel | null) => void
 const vowelChangeListeners = new Set<VowelChangeListener>()
 
 // Create adapters lazily to avoid circular dependency with router initialization
@@ -260,19 +253,12 @@ Help users navigate and manage their network infrastructure through voice comman
       showOnMobile: false,
     },
 
-    voiceConfig: USE_ALTERNATIVE_PROVIDER
-      ? {
-          // Alternative provider configuration (for advanced users)
-          provider: 'custom',
-          language: 'en-US',
-          initialGreetingPrompt: `Check the context for action items: critical events (context.events.stats.critical), unacknowledged events, devices needing firmware updates, and pending firmware workflows. If there are action items: if there are many (3+), summarize in 1-2 sentences. If there are few (1-2), mention them specifically. If none, say "Hello, how can I help?". Be terse and get out of the user's way immediately.`,
-        }
-      : {
-          // Default: vowel.to hosted voice service
-          provider: 'vowel-prime',
-          voice: 'Timothy',
-          language: 'en-US',
-          initialGreetingPrompt: `Check the context for action items: critical events (context.events.stats.critical), unacknowledged events, devices needing firmware updates, and pending firmware workflows. If there are action items: if there are many (3+), summarize in 1-2 sentences. If there are few (1-2), mention them specifically. If none, say "Hello, how can I help?". Be terse and get out of the user's way immediately.`,
+    _voiceConfig: {
+      // Default: vowel.to hosted voice service
+      provider: 'vowel-prime',
+      voice: 'Timothy',
+      language: 'en-US',
+      initialGreetingPrompt: `Check the context for action items: critical events (context.events.stats.critical), unacknowledged events, devices needing firmware updates, and pending firmware workflows. If there are action items: if there are many (3+), summarize in 1-2 sentences. If there are few (1-2), mention them specifically. If none, say "Hello, how can I help?". Be terse and get out of the user's way immediately.`,
 
       /** Turn detection: server-side VAD (AssemblyAI STT with integrated VAD) */
       ...(USE_SERVER_VAD
@@ -285,33 +271,6 @@ Help users navigate and manage their network infrastructure through voice comman
                 silenceDurationMs: 550,
                 interruptResponse: true,
               },
-            },
-            providerConfig: {
-              stt: {
-                provider: 'assemblyai' as const,
-                assemblyai: {
-                  sampleRate: 24000,
-                  encoding: 'pcm_s16le',
-                  wordBoost: [
-                    'router',
-                    'switch',
-                    'access-point',
-                    'firewall',
-                    'hostname',
-                    'firmware',
-                    'topology',
-                    'workflow',
-                    'notes',
-                    'note',
-                    'DEV',
-                    'evt',
-                    'building',
-                    'floor',
-                    'Building',
-                  ],
-                },
-              },
-              // VAD automatically set to 'assemblyai-integrated' when using AssemblyAI STT
             },
           }
         : {}),

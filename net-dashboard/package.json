@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vowel.to/client": "^0.3.0",
+    "@vowel.to/client": "workspace:*",
     "@tanstack/react-router": "^1.157.18",
     "@tanstack/router-devtools": "^1.157.18",
     "@tanstack/router-vite-plugin": "^1.157.18",

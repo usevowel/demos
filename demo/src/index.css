@@ -1,0 +1,69 @@
+/**
+ * Global styles and Tailwind CSS imports
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* OCR-A Font - For vowel branding */
+@font-face {
+  font-family: 'OCR-A';
+  src: url('/fonts/OCR-A_Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Ensure OCR-A font renders nicely */
+.font-ocr-a,
+[style*="font-family: 'OCR-A'"] {
+  font-feature-settings: normal;
+  letter-spacing: 0.02em;
+}
+
+/* Custom global styles */
+body {
+  @apply antialiased;
+}
+
+/* Fix for DaisyUI inputs and form controls */
+.input,
+.select,
+.textarea {
+  @apply transition-colors;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-base-200;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-base-300 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-base-content/30;
+}
+
+/* Vowel Voice Agent Animations */
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+

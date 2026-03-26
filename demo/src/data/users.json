@@ -1,0 +1,48 @@
+[
+  {
+    "id": "1",
+    "name": "Admin Doe",
+    "email": "admin@example.com",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+    "role": "admin",
+    "createdAt": "2024-01-15T00:00:00.000Z",
+    "lastLogin": "2025-10-05T00:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane",
+    "role": "user",
+    "createdAt": "2024-02-20T00:00:00.000Z",
+    "lastLogin": "2025-10-04T00:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "name": "Bob Johnson",
+    "email": "bob@example.com",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
+    "role": "user",
+    "createdAt": "2024-03-10T00:00:00.000Z",
+    "lastLogin": "2025-09-30T00:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "name": "Alice Williams",
+    "email": "alice@example.com",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
+    "role": "user",
+    "createdAt": "2024-04-05T00:00:00.000Z",
+    "lastLogin": "2025-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "5",
+    "name": "Charlie Brown",
+    "email": "charlie@example.com",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Charlie",
+    "role": "user",
+    "createdAt": "2024-05-12T00:00:00.000Z",
+    "lastLogin": "2025-09-28T00:00:00.000Z"
+  }
+]
+
