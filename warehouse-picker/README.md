@@ -1,319 +1,223 @@
-# Warehouse Picker Demo
+# Pickr - Warehouse Picking System
 
-A voice-powered e-commerce experience for auto parts shopping with vehicle management and voice-controlled cart operations.
+A real-time warehouse picking system with state synchronization between warehouse displays and mobile picker devices using Cloudflare Durable Objects and WebSockets.
 
-## Features
+## Architecture
 
-- 🛍️ **Product Catalog** - Browse and search auto parts (batteries, brake pads, oil, etc.)
-- 🚗 **Vehicle Management** - Add and select vehicles for parts compatibility checking
-- 🛒 **Shopping Cart** - Voice-controlled cart with 3 delivery methods:
-  - Store Pickup (FREE, ready in 30 mins)
-  - Same Day Delivery ($8.99 per item)
-  - Home Delivery (FREE for orders over $35)
-- 💰 **Discount Codes** - Apply and manage promotional codes
-- ❤️ **Wishlist** - Save items for later with vehicle associations
-- 📜 **Purchase History** - View previous orders and reorder
-- 🔧 **Compatibility Check** - Verify parts fit selected vehicles
-
-## Voice Commands
-
-Try these voice commands to shop with your voice:
-
-### Product Search
-- "Search for H6-AGM battery"
-- "Show me brake pads"
-- "Find products under $50"
-- "Filter by brand DieHard"
-- "Show oil filters"
-
-### Cart Management
-- "Add battery to cart with home delivery"
-- "Add 2 brake pads to cart"
-- "What's in my cart?"
-- "Remove battery from cart"
-- "Update quantity to 3"
-- "Apply discount code SAVE15"
-- "Show cart summary"
-
-### Vehicle Management
-- "Open vehicle selector"
-- "Select vehicle 1"
-- "What vehicle is selected?"
-- "Show my registered vehicles"
-
-### Navigation
-- "Go to home"
-- "Show products"
-- "Go to cart"
-- "Show my wishlist"
-- "View purchase history"
-
-### Wishlist
-- "Add battery to wishlist"
-- "Show my wishlist"
-- "Remove brake pads from wishlist"
-
-## Tech Stack
-
-- **React 19** - UI framework
-- **TypeScript 5.9** - Type safety
-- **Vite 7** - Build tool
-- **TanStack Router** - File-based routing
-- **Valtio** - State management with localStorage persistence
-- **Tailwind CSS** - Styling
-- **vowel.to** - Voice AI integration
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ or Bun 1.1+
-- A free vowel.to App ID ([get one here](https://vowel.to))
-
-### Installation
-
-1. **Install dependencies:**
-   ```bash
-   npm install
-   # or
-   bun install
-   ```
-
-2. **Configure your App ID:**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and add your vowel.to App ID:
-   ```
-   VITE_VOWEL_APP_ID=your_app_id_here
-   ```
-
-3. **Start the development server:**
-   ```bash
-   npm run dev
-   # or
-   bun run dev
-   ```
-
-4. **Open your browser:**
-   Navigate to `http://localhost:5173`
-
-5. **Activate voice:**
-   Click the microphone button in the bottom-right corner to start voice interaction.
+- **Frontend**: React Native (Expo) web app with real-time QR code generation
+- **Backend**: Cloudflare Worker with Durable Objects for state persistence
+- **State Sync**: WebSocket connections for real-time updates between warehouse and picker devices
+- **Storage**: SQLite within Durable Objects for session state persistence
 
 ## Project Structure
 
 ```
-src/
-├── components/           # React UI components
-│   ├── ui/              # shadcn/ui components
-│   ├── Header.tsx       # App header with cart
-│   ├── AppHeader.tsx    # Alternative header
-│   ├── ProductList.tsx  # Product grid display
-│   └── ...              # Other components
-├── routes/              # TanStack Router routes
-│   ├── __root.tsx       # Root layout
-│   ├── index.tsx        # Home/landing page
-│   ├── category.tsx     # Product category/search
-│   ├── product/         # Product detail routes
-│   ├── cart.tsx         # Shopping cart
-│   ├── wishlist.tsx     # Wishlist page
-│   └── purchases.tsx    # Purchase history
-├── store/               # Valtio state stores
-│   ├── cart.ts          # Shopping cart state
-│   ├── vehicle.ts       # Vehicle management
-│   ├── wishlist.ts      # Wishlist state
-│   ├── purchases.ts     # Purchase history
-│   └── mockData.ts      # Mock data initialization
-├── data/                # Data files
-│   ├── products.ts      # Product catalog
-│   └── users.ts         # Mock user data
-├── hooks/               # Custom React hooks
-│   ├── useAppStateSync.ts  # Sync state to voice context
-│   └── useFeatureFlagEnabled.ts # Feature flags
-├── lib/                 # Utility functions
-│   └── utils.ts         # Helper utilities
-├── vowel.client.ts      # Voice agent configuration
-├── router.ts            # TanStack Router setup
-└── main.tsx             # App entry point
-
-data/
-└── auto-parts.json      # Product data (images, SKUs, etc.)
+├── app/                    # Expo/React Native frontend
+│   ├── warehouse.tsx      # Warehouse display page (admin view)
+│   ├── pick.tsx           # Picker mobile interface
+│   └── index.tsx          # Login page
+├── src/                    # Cloudflare Worker backend
+│   ├── worker.ts          # HTTP request handler & WebSocket upgrade
+│   └── warehouse-session.ts # Durable Object for session state
+├── lib/                    # Shared utilities
+│   ├── store.ts           # Valtio state management
+│   ├── websocket.ts       # WebSocket client wrapper
+│   └── session-pairing.ts # QR code pairing utilities
+├── components/            # React components
+└── wrangler.toml         # Cloudflare Worker configuration
 ```
 
-## Voice Integration
+## Prerequisites
 
-The demo uses `@vowel.to/client` to add voice capabilities.
+- Bun runtime (https://bun.sh)
+- Cloudflare account with Workers enabled
+- Wrangler CLI installed: `bun install -g wrangler`
+- Expo CLI (optional, for mobile testing): `bun install -g expo-cli`
 
-### Custom Actions
+## Setup
 
-25+ voice actions are registered in `vowel.client.ts`:
+1. **Install dependencies:**
+   ```bash
+   bun install
+   cd src && bun install
+   ```
 
-#### Product Search & Filtering
-- `searchProducts` - Search by name, SKU, or category
-- `filterProductsByCategory` - Filter by category (batteries, brakepads, etc.)
-- `filterProductsByBrand` - Filter by brand name
-- `filterProductsByPriceRange` - Filter by price range
-- `viewProduct` - Navigate to product detail page
+2. **Configure environment variables:**
+   ```bash
+   # .env file in project root
+   EXPO_PUBLIC_WS_URL=wss://pickr-warehouse.YOUR_SUBDOMAIN.workers.dev
+   EXPO_PUBLIC_API_URL=https://pickr-warehouse.YOUR_SUBDOMAIN.workers.dev
+   ```
 
-#### Cart Management
-- `addToCart` - Add products with quantity and delivery method
-- `removeFromCart` - Remove items from cart
-- `updateCartItemQuantity` - Change item quantities
-- `updateCartItemDeliveryMethod` - Switch delivery methods
-- `applyDiscountCode` - Apply promotional codes
-- `removeDiscountCode` - Remove applied codes
-- `getCartSummary` - Show cart contents
-- `openCartOverlay` / `closeCartOverlay` - Toggle cart sidebar
+3. **Update `wrangler.toml` with your Cloudflare settings** if you are deploying the Worker.
 
-#### Vehicle Management
-- `openVehicleSelector` / `closeVehicleSelector` - Toggle vehicle modal
-- `selectVehicle` - Select vehicle by index
+## Deployment
 
-#### Wishlist
-- `addToWishlist` - Save items for later
-- `removeFromWishlist` - Remove from wishlist
-- `viewWishlist` - Navigate to wishlist page
+1. **Deploy the Worker:**
+   ```bash
+   cd src
+   wrangler deploy
+   ```
+   
+   Note the deployment URL (e.g., `https://pickr-warehouse.YOUR_SUBDOMAIN.workers.dev`)
 
-#### Purchases
-- `viewPurchases` - View purchase history
+2. **Update environment variables** with the actual deployed URL
 
-### Configuration
+3. **Start the frontend:**
+   ```bash
+   # For web development
+   bun run web
+   
+   # For mobile (requires Expo Go app)
+   bun start
+   ```
 
-Voice features are configured in `vowel.client.ts`:
+## Testing the Flow
 
-```typescript
-const vowel = new Vowel({
-  appId: import.meta.env.VITE_VOWEL_APP_ID,
-  
-  instructions: `You are a helpful assistant for an auto parts e-commerce website...`,
-  
-  navigationAdapter: createTanStackAdapters({ router }),
-  
-  borderGlow: {
-    enabled: true,
-    color: 'rgba(255, 193, 7, 0.5)', // Amber/yellow
-  },
-  
-  _caption: {
-    enabled: true,
-    position: 'top-center',
-  },
-})
-```
+### 1. Login as Admin (Warehouse)
 
-## Customization
+1. Open the app at `http://localhost:8081` (or your deployed URL)
+2. Login with:
+   - **Email**: `admin@warehouse.com`
+   - **Password**: use the local demo credential from your environment
+3. You'll be redirected to the **Warehouse** page
+4. A pairing QR code modal will appear automatically
 
-### Adding New Voice Actions
+### 2. Connect a Picker Device
 
-1. Open `src/vowel.client.ts`
-2. Add a new action:
+**Option A: Using a second browser window**
+1. Open a new browser window in incognito/private mode
+2. Navigate to the app
+3. Login with:
+   - **Email**: `picker1@warehouse.com` (or any picker account)
+   - **Password**: use the local demo credential from your environment
+4. You'll be prompted to scan the pairing QR code
+5. Since you can't scan with a browser, use the **manual connection** method:
+   - Check the browser console or network tab for the session ID
+   - Or use the session ID displayed in the warehouse modal
 
-```typescript
-vowel.registerAction(
-  'myNewAction',
-  {
-    description: 'What this action does',
-    parameters: {
-      paramName: { 
-        type: 'string', 
-        description: 'What this parameter is for' 
-      },
-    },
-  },
-  async ({ paramName }) => {
-    // Your implementation
-    return {
-      success: true,
-      message: `Action completed`,
-    }
-  }
-)
-```
+**Option B: Using a mobile device**
+1. Install the Expo Go app on your phone
+2. Start the app with `bun start`
+3. Scan the QR code with your phone's camera
+4. Login as a picker
+5. Scan the warehouse's pairing QR code with your phone
 
-3. Update the AI instructions to mention the new action
+### 3. Test State Synchronization
 
-### Theming
+**Generate QR Codes:**
+1. On the **Picker** device:
+   - Tap "Available" tab
+   - Select an order (e.g., ORD-001)
+   - Tap on an item row to select it
+   
+2. On the **Warehouse** display:
+   - You should see a QR code appear on the corresponding shelf location
+   - The QR code contains item ID, location, and order information
+   - The Active QR Codes panel at the bottom will show the generated code
 
-Customize colors in `tailwind.config.js`:
+**Verify Real-time Sync:**
+1. The QR code should appear instantly on the warehouse display
+2. Tap the QR code on the warehouse display to see details
+3. On the picker device, select a different item - the QR code should update
+4. Clear the selection on the picker - the QR code should disappear from warehouse
 
-```javascript
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        primary: '#ef4444',    // Red for auto parts theme
-        secondary: '#f97316',  // Orange
-      },
-    },
-  },
-}
-```
+**Test Multiple Pickers:**
+1. Open multiple picker sessions (different browsers/devices)
+2. Each picker should see the same active QR codes
+3. When one picker selects an item, all connected devices update
 
-### Vehicle Fit Data
+### 4. Test Order Management
 
-Vehicle compatibility is determined by:
-1. Checking `vehicleFit` data in product objects
-2. Falling back to deterministic hash-based fit for unknown vehicles
+**Pick Items:**
+1. On the picker device, select an order
+2. Tap "Pick" on an item
+3. The order progress bar updates
+4. Continue picking until order is complete
 
-To add new vehicles or products, edit `src/data/products.ts`.
+**Block Items:**
+1. Select an item with issues
+2. Tap "Skip" or use block functionality
+3. The item status updates to "blocked"
+4. Warehouse display reflects the blocked status
 
-## Data
+### 5. Test Session Persistence
 
-All data is mock data:
+1. Refresh the warehouse page
+2. The session should restore with active QR codes
+3. Durable Object persists state in SQLite
+4. Reconnect picker devices using the same session ID
 
-- **Products** - Car batteries, brake pads, rotors, oil, oil filters
-- **Vehicles** - Pre-configured demo vehicles (2024 Honda Accord, etc.)
-- **Users** - Mock user accounts with names
-- **Purchases** - Synthetic purchase history
+## WebSocket Message Types
 
-Data persists to localStorage via Valtio stores.
+**Client → Server:**
+- `connect`: Initial connection with client type
+- `addQRCode`: Add a QR code to a location
+- `removeQRCode`: Remove QR code from location
+- `clearAllQRCodes`: Clear all active QR codes
+- `setSelectedOrderItem`: Update selected order item
+- `syncRequest`: Request full state sync
 
-## Delivery Methods
-
-Three delivery options are supported:
-
-1. **Store Pickup**
-   - Cost: FREE
-   - Ready: 30 minutes
-   - Location: In-store pickup
-
-2. **Same Day Delivery**
-   - Cost: $8.99 per item
-   - Order by: 8:00 PM
-   - Delivery: Same day
-
-3. **Home Delivery**
-   - Cost: FREE for orders over $35, otherwise $5.99 per item
-   - Standard shipping to your address
+**Server → Client:**
+- `connected`: Connection acknowledged
+- `stateSync`: Full state synchronization
+- `qrCodeAdded`: New QR code added
+- `qrCodeRemoved`: QR code removed
+- `allQRCodesCleared`: All codes cleared
+- `selectedOrderItemChanged`: Selection changed
 
 ## Troubleshooting
 
-### Voice Not Working
+**WebSocket Connection Issues:**
+- Check that `EXPO_PUBLIC_WS_URL` uses `wss://` for production, `ws://` for local
+- Verify the worker is deployed and accessible
+- Check browser console for connection errors
 
-1. **Check App ID:** Verify `VITE_VOWEL_APP_ID` is set in `.env`
-2. **Browser Console:** Look for error messages
-3. **Microphone Permission:** Ensure browser has microphone access
-4. **HTTPS:** Voice requires HTTPS (localhost works for development)
+**Durable Object Errors:**
+- Ensure `wrangler.toml` has correct `account_id`
+- Verify Durable Object migrations are applied: `wrangler d1 migrations apply`
+- Check worker logs: `wrangler tail`
 
-### Product Images Not Loading
+**State Not Syncing:**
+- Verify both devices are connected to the same session ID
+- Check WebSocket messages in browser DevTools Network tab
+- Ensure session ID is being passed correctly in URL params
 
-Product images are loaded from external URLs. If images don't load:
-1. Check your internet connection
-2. Verify the image URLs in `data/auto-parts.json`
-3. Some images may use placeholder services
+**QR Code Not Generating:**
+- Verify picker has selected an order item
+- Check that location string format is correct (e.g., "A1-R1-B1")
+- Ensure `qrcode` library is installed
 
-### Cart Not Persisting
+## Development
 
-Cart data is stored in localStorage via `valtio-persist`. If data doesn't persist:
-1. Check browser localStorage is enabled
-2. Clear localStorage and refresh: `localStorage.clear()` in browser console
+**Local Development:**
+```bash
+# Terminal 1: Start the worker locally
+wrangler dev
+
+# Terminal 2: Start the Expo app
+bun run web
+```
+
+**Testing WebSocket Locally:**
+- Worker runs on `http://localhost:8787`
+- Expo app runs on `http://localhost:8081`
+- Update `.env` to use `ws://localhost:8787`
+
+**Adding New Features:**
+1. Update the Durable Object state interface in `warehouse-session.ts`
+2. Add RPC methods for new operations
+3. Update WebSocket message types
+4. Modify frontend components to use new messages
+5. Update SQLite schema if needed (add migrations)
+
+## Environment Variables
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `EXPO_PUBLIC_WS_URL` | WebSocket endpoint | `wss://pickr-warehouse.YOUR_SUBDOMAIN.workers.dev` |
+| `EXPO_PUBLIC_API_URL` | HTTP API endpoint | `https://pickr-warehouse.YOUR_SUBDOMAIN.workers.dev` |
 
 ## License
 
-MIT License - See [LICENSE](../LICENSE) for details
-
----
-
-Built with [vowel.to](https://vowel.to) - Voice AI for web applications
+MIT

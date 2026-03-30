@@ -106,7 +106,7 @@ To point the demo at the local Docker Compose stack from the platform root:
    bun run stack:sync-secrets
    bun run stack:up
    ```
-   By default the stack uses `http://localhost:3000` and `ws://localhost:8787`. If those ports are busy, set `CORE_HOST_PORT` / `SNDBRD_HOST_PORT` in `stack.env`.
+   By default the stack uses `http://localhost:3000` and `ws://localhost:8787`. If those ports are busy, set `CORE_HOST_PORT` / `ENGINE_HOST_PORT` in `stack.env`.
 
 2. **Add to demo** (`demos/demo/.env.local`):
    ```
