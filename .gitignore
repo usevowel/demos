@@ -5,6 +5,7 @@
 .env.production
 .env.development
 .env.staging
+.env.grok
 
 # Build artifacts
 dist/
