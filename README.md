@@ -2,11 +2,41 @@
 
 A collection of interactive demo applications showcasing the voice AI capabilities of [vowel.to](https://vowel.to). These demos are designed to be run locally and demonstrate how voice agents can enhance web applications across different domains.
 
+> **⚠️ Beta Release** — This open-source release is in beta. You may encounter rough edges, incomplete features, or breaking changes. We are actively reviewing and merging community PRs, but please expect some instability as we iterate toward a stable release. Your feedback and contributions are welcome.
+
 ## Available Demos
+
+### Demo (E-commerce)
+
+A comprehensive e-commerce demo showcasing voice-powered shopping with product catalog, cart management, and full page automation.
+
+**Features:**
+- 🛍️ **Product Catalog** - Browse and search products across multiple categories
+- 🛒 **Shopping Cart** - Voice-controlled cart management with add/remove items
+- 🤖 **Page Automation** - Full DOM control via voice (click, type, search)
+- 🎯 **Speaking State Tracking** - Real-time visual indicators for voice states
+- 📍 **Voice Navigation** - Navigate between pages using natural language
+- 👤 **User Management** - User profiles and authentication
+- 🎨 **Responsive Design** - DaisyUI components with Tailwind CSS
+
+**Voice Capabilities:**
+- "Show me products"
+- "Add this to my cart"
+- "Search for electronics under $100"
+- "Click the add to cart button"
+- "Type 'laptop' in the search box"
+- "Go to cart"
+- "Navigate to dashboard"
+
+**Tech Stack:** React 19, TypeScript, Vite, TanStack Router, Valtio, DaisyUI, Tailwind CSS
+
+[View Demo →](./demo/)
+
+---
 
 ### Net Dashboard
 
-A network infrastructure management dashboard with voice-controlled navigation and device management.
+A voice-powered network infrastructure management dashboard with voice-controlled navigation and device management.
 
 **Features:**
 - 🌐 **Interactive Network Topology** - Visualize 58+ network devices across 3 buildings using ReactFlow
@@ -30,29 +60,22 @@ A network infrastructure management dashboard with voice-controlled navigation a
 
 ---
 
-### Warehouse Picker
+### Warehouse Picker (Pickr)
 
-A voice-powered e-commerce experience for auto parts shopping with vehicle management and cart control.
+A real-time warehouse picking system with state synchronization between warehouse displays and mobile picker devices.
 
 **Features:**
-- 🛍️ **Product Catalog** - Browse and search auto parts (batteries, brake pads, oil, etc.)
-- 🚗 **Vehicle Management** - Add and select vehicles for parts compatibility checking
-- 🛒 **Shopping Cart** - Voice-controlled cart with 3 delivery methods (store pickup, same-day, home delivery)
-- 💰 **Discount Codes** - Apply and manage promotional codes
-- ❤️ **Wishlist** - Save items for later with vehicle associations
-- 📜 **Purchase History** - View previous orders and reorder
-- 🔧 **Compatibility Check** - Verify parts fit selected vehicles
+- 📱 **Mobile Picker Interface** - React Native (Expo) app for pickers
+- 🖥️ **Warehouse Display** - Real-time QR code generation for shelf locations
+- 🔄 **State Synchronization** - WebSocket-based real-time updates via Cloudflare Durable Objects
+- 📦 **Order Management** - Pick, skip, and block items with progress tracking
+- 🔐 **Session Pairing** - QR code pairing between warehouse and picker devices
+- 💾 **Session Persistence** - SQLite state persistence in Durable Objects
 
 **Voice Capabilities:**
-- "Search for H6-AGM battery"
-- "Add 2 batteries to cart with home delivery"
-- "Show me brake pads under $50"
-- "Apply discount code SAVE15"
-- "What's in my cart?"
-- "Show my wishlist"
-- "Select vehicle 1"
+- Voice integration ready (infrastructure for voice commands)
 
-**Tech Stack:** React 19, TypeScript, Vite, TanStack Router, Valtio, Tailwind CSS
+**Tech Stack:** React Native (Expo), TypeScript, Cloudflare Workers, Durable Objects, WebSockets, SQLite
 
 [View Demo →](./warehouse-picker/)
 
@@ -69,6 +92,8 @@ A voice-powered e-commerce experience for auto parts shopping with vehicle manag
 
 1. **Navigate to a demo:**
    ```bash
+   cd demo
+   # or
    cd net-dashboard
    # or
    cd warehouse-picker
@@ -152,6 +177,18 @@ vowel.registerAction('searchProducts', {
 
 ```
 demos/
+├── demo/                   # E-commerce shopping demo
+│   ├── src/
+│   │   ├── components/     # React UI components
+│   │   ├── routes/         # TanStack Router routes
+│   │   ├── store/          # Valtio state management
+│   │   ├── vowel.client.ts # Voice configuration
+│   │   └── main.tsx        # App entry point
+│   ├── public/             # Static assets
+│   ├── .env.example        # Environment template
+│   ├── package.json
+│   └── README.md           # Demo-specific docs
+│
 ├── net-dashboard/          # Network management demo
 │   ├── src/
 │   │   ├── components/     # React UI components
@@ -165,8 +202,12 @@ demos/
 │   ├── package.json
 │   └── README.md           # Demo-specific docs
 │
-├── warehouse-picker/       # E-commerce demo
-│   └── ... (similar structure)
+├── warehouse-picker/       # Warehouse picking system (Pickr)
+│   ├── app/                # Expo/React Native frontend
+│   ├── src/                # Cloudflare Worker backend
+│   ├── components/         # React components
+│   ├── package.json
+│   └── README.md           # Demo-specific docs
 │
 └── README.md               # This file
 ```
@@ -208,7 +249,7 @@ To extend a demo with new voice capabilities:
 
 ### Theming
 
-Both demos use Tailwind CSS. Customize colors in `tailwind.config.js`:
+**Demo (E-commerce)** and **Net Dashboard** use Tailwind CSS. Customize colors in `tailwind.config.js`:
 
 ```javascript
 module.exports = {
@@ -221,6 +262,9 @@ module.exports = {
     },
   },
 }
+```
+
+**Warehouse Picker (Pickr)** uses its own styling system within the Expo/React Native framework.
 ```
 
 ---
@@ -292,13 +336,18 @@ Configure the AI to be concise:
 
 ### Demo-Specific Issues
 
+**Demo (E-commerce):**
+- Check that `@vowel.to/client` is built if making changes to the client library
+- For Grok testing, ensure the app has a configured Grok AI connection in the platform
+
 **Net Dashboard:**
 - If topology doesn't render, check ReactFlow is installed
 - Mock data loads from `src/data/` - verify files exist
 
-**Warehouse Picker:**
-- Vehicle compatibility uses mock data in `data/auto-parts.json`
-- Cart persists to localStorage via valtio-persist
+**Warehouse Picker (Pickr):**
+- Ensure `wrangler.toml` has correct `account_id` for Cloudflare deployment
+- Verify Durable Object migrations are applied: `wrangler d1 migrations apply`
+- For WebSocket issues, check that `EXPO_PUBLIC_WS_URL` uses correct protocol (`wss://` for production, `ws://` for local)
 
 ---
 
