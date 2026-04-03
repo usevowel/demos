@@ -1,23 +1,13 @@
 /**
  * vowel.to Voice Agent Configuration
- * 
+ *
  * This demo showcases the new dual adapter architecture:
  * - NavigationAdapter: Handles WHERE to go (TanStack Router)
  * - AutomationAdapter: Handles WHAT to do (page interaction)
- * 
+ *
  * Both adapters are optional and independent!
- * 
- * Token Source (controlled by env):
- * - VITE_USE_CORE_COMPOSE=1: Use the local Docker Compose Core stack (tokenProvider)
- *   Requires VITE_CORE_API_KEY and VITE_CORE_APP_ID.
- * - VITE_CORE_SELF_HOSTED=1: Legacy alias for the same self-hosted path
- *   Requires VITE_CORE_API_KEY. Core resolves the app from that key.
- * - Default: Platform token (appId)
- * 
- * Voice Provider (controlled by DEMO_VOICE_PROVIDER const):
- * - 'grok': xAI Grok Realtime API (platform token)
- * - 'vowel-prime': Hosted dev (wss://dev-prime.vowel.to) or self-hosted when Core env is set
- *   Voice selection is routed through hosted TTS mappings.
+ *
+ * Uses vowel-core preset with localhost:3000 token endpoint.
  */
 
 import { Vowel, createTanStackAdapters } from '@vowel.to/client';
@@ -425,58 +415,6 @@ Remember: You have powerful tools available. Use them! Don't hesitate to call mu
     turnDetectionPreset: selectedDemoConfig.turnDetectionPreset,
     initialGreetingPrompt: selectedDemoConfig.initialGreetingPrompt,
     _voiceConfig: selectedDemoConfig.voiceConfig,
-
-    // Option 1 (previous): Vowel Prime
-    // language: 'en-US',
-    // initialGreetingPrompt: `Introduce yourself as an assistant for the store.`,
-    // turnDetectionPreset: 'balanced',
-    // _voiceConfig: {
-    //   provider: 'vowel-prime',
-    //   ...(USE_CORE_SELF_HOSTED ? {} : {
-    //     vowelPrimeConfig: { environment: 'dev' },
-    //   }),
-    //   llmProvider: 'groq',
-    //   model: "openai/gpt-oss-120b",
-    //   voice: 'Timothy',
-    //   turnDetection: {
-    //     mode: DEMO_TURN_DETECTION_MODE,
-    //     ...(DEMO_TURN_DETECTION_MODE === 'client_vad' && {
-    //       clientVAD: {
-    //         adapter: 'silero-vad',
-    //         config: {
-    //           threshold: 0.5,
-    //           minSpeechDurationMs: 250,
-    //           silenceDurationMs: 500,
-    //         },
-    //         autoCommit: true,
-    //       },
-    //     }),
-    //     ...(DEMO_TURN_DETECTION_MODE === 'server_vad' && {
-    //       serverVAD: {
-    //         threshold: 0.5,
-    //         silenceDurationMs: 550,
-    //         prefixPaddingMs: 0,
-    //         interruptResponse: true,
-    //       },
-    //     }),
-    //   },
-    // },
-
-    // Option 2: OpenAI Realtime API
-    // language: 'en-US',
-    // _voiceConfig: {
-    //   provider: 'openai',
-    //   model: 'gpt-realtime',
-    //   voice: 'alloy',  // OpenAI voice options: alloy, echo, fable, onyx, nova, shimmer
-    // },
-    
-    // Option 3: Gemini Live API
-    // language: 'en-US',
-    // _voiceConfig: {
-    //   provider: 'gemini',
-    //   model: 'gemini-live-2.5-flash-preview',
-    //   voice: 'Puck',  // Gemini voice options: Puck, Charon, Kore, Fenrir, Aoede
-    // },
     
     // Speaking state tracking callbacks
     onUserSpeakingChange: (isSpeaking) => {

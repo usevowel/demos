@@ -80,65 +80,26 @@ This demo uses the `@vowel.to/client` package from GitHub Packages. You'll need 
 
 ### Environment Variables
 
-The demo supports two main local modes:
+This demo uses the **vowel-core preset** with `localhost:3000` as the token endpoint.
+The configuration is centralized in `src/vowel.config.ts`.
 
-- `.env.local`: Core/self-hosted flow
-- `.env.grok`: platform-backed Grok flow
+To run the demo:
 
-For Grok testing, run:
-
-```bash
-cd demos/demo
-bun run dev:grok
-```
-
-This starts the demo on `http://localhost:3901`.
-
-Note: the demo currently resolves `@vowel.to/client` through the package exports again. That means local demo development depends on a current `client/dist`, so if you change the client package you should rebuild it before rerunning the demo.
-
-### Core Self-Hosted / Docker Compose (Optional)
-
-To point the demo at the local Docker Compose stack from the platform root:
-
-1. **Start the stack** (from platform root):
-   ```bash
-   cp stack.env.example stack.env
-   bun run stack:sync-secrets
-   bun run stack:up
-   ```
-   By default the stack uses `http://localhost:3000` and `ws://localhost:8787`. If those ports are busy, set `CORE_HOST_PORT` / `ENGINE_HOST_PORT` in `stack.env`.
-
-2. **Add to demo** (`demos/demo/.env.local`):
-   ```
-   VITE_USE_CORE_COMPOSE=1
-   VITE_CORE_BASE_URL=http://localhost:3000
-   VITE_CORE_TOKEN_ENDPOINT=http://localhost:3000/vowel/api/generateToken
-   VITE_CORE_API_KEY=vkey_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   VITE_CORE_APP_ID=default
-   ```
-
-   `VITE_CORE_SELF_HOSTED=1` still works as a legacy alias, but `VITE_USE_CORE_COMPOSE=1` is the preferred flag now.
-
-3. **Run the demo**:
+1. **Ensure your local core is running** at `http://localhost:3000`
+2. **Run the demo**:
    ```bash
    cd demos/demo && bun run dev
    ```
+3. **Test**: Open the demo, click the mic, and speak. The demo will fetch tokens from your local core.
 
-4. **Test**: Open the demo, click the mic, and speak. The demo will fetch tokens from Core, which proxies to the configured engine runtime.
+### Optional Configuration
 
-### Grok Realtime (Platform-backed)
+You can optionally set the app ID in `.env.local`:
+```
+VITE_VOWEL_APP_ID=default
+```
 
-To test Grok through the platform token flow instead of the Core/self-hosted path:
-
-1. Create or update `demos/demo/.env.grok`
-2. Ensure the target app has a configured `grok` AI connection in the platform
-3. Start the demo:
-   ```bash
-   cd demos/demo && bun run dev:grok
-   ```
-4. Open `http://localhost:3901`
-
-In Grok mode, the demo uses `_voiceConfig.provider = "grok"` and should not route through `vowel-prime`.
+Note: The demo currently resolves `@vowel.to/client` through the package exports. That means local demo development depends on a current `client/dist`, so if you change the client package you should rebuild it before rerunning the demo.
 
 ## Project Structure
 

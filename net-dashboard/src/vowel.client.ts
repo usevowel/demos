@@ -1,3 +1,9 @@
+/**
+ * vowel.to Voice Agent Configuration - vowel-core preset (localhost:3000)
+ *
+ * Uses the self-hosted vowel-core preset with local token endpoint at localhost:3000.
+ */
+
 import { Vowel, createTanStackAdapters } from '@vowel.to/client'
 import { router } from './router'
 import {
@@ -31,9 +37,8 @@ import { setSelectedTenant } from '@/store/tenantStore'
 import { createNote, getAllNotes, updateNote, deleteNote } from '@/store/notesStore'
 
 /**
- * VAD Configuration - Use server-side VAD like the auto parts demo
- * Server-side VAD uses AssemblyAI ASR with integrated VAD, which works better
- * on older devices and provides more consistent turn detection.
+ * VAD Configuration - Use server-side VAD for better turn detection
+ * Server-side VAD provides more consistent turn detection on older devices.
  */
 const USE_SERVER_VAD = true
 
@@ -253,28 +258,9 @@ Help users navigate and manage their network infrastructure through voice comman
       showOnMobile: false,
     },
 
-    _voiceConfig: {
-      // Default: vowel.to hosted voice service
-      provider: 'vowel-prime',
-      voice: 'Timothy',
-      language: 'en-US',
-      initialGreetingPrompt: `Check the context for action items: critical events (context.events.stats.critical), unacknowledged events, devices needing firmware updates, and pending firmware workflows. If there are action items: if there are many (3+), summarize in 1-2 sentences. If there are few (1-2), mention them specifically. If none, say "Hello, how can I help?". Be terse and get out of the user's way immediately.`,
-
-      /** Turn detection: server-side VAD (AssemblyAI STT with integrated VAD) */
-      ...(USE_SERVER_VAD
-        ? {
-            turnDetection: {
-              mode: 'server_vad' as const,
-              serverVAD: {
-                threshold: 0.5,
-                prefixPaddingMs: 350,
-                silenceDurationMs: 550,
-                interruptResponse: true,
-              },
-            },
-          }
-        : {}),
-    },
+    /** Use vowel-core preset with localhost:3000 token endpoint */
+    preset: 'vowel-core' as const,
+    tokenEndpoint: 'http://localhost:3000/vowel/api/generateToken',
 
     onUserSpeakingChange: (isSpeaking) => {
       console.log(isSpeaking ? '🗣️ User started speaking' : '🔇 User stopped speaking')
