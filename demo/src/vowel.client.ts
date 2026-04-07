@@ -109,8 +109,12 @@ You can verify this context at any time using getCurrentUserContext(), but the i
 
   const tokenConfig = selectedDemoConfig.resolveTokenConfig();
 
+  // Get API key from environment for vowel-core preset
+  const apiKey = import.meta.env.VITE_CORE_API_KEY;
+
   const client = new Vowel({
     appId: appId,
+    ...(apiKey ? { apiKey } : {}),
     ...tokenConfig,
 
     // System instructions for the AI agent

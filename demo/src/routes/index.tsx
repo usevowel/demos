@@ -65,8 +65,8 @@ function HomePage() {
                   <h3 className="card-title text-lg">User Speaking</h3>
                 </div>
                 <p className="text-sm">
-                  Detected via client-side Voice Activity Detection (VAD) with <strong>&lt;100ms latency</strong>.
-                  Uses Silero VAD model for accurate real-time detection.
+                  Detected via server-side Voice Activity Detection (VAD) with <strong>&lt;200ms latency</strong>.
+                  Uses Deepgram Nova-3 built-in VAD for accurate real-time detection.
                 </p>
                 <div className="badge badge-info gap-1 mt-2">
                   🔵 Blue Indicator

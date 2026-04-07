@@ -3,7 +3,7 @@
  * 
  * Showcases the new speaking state tracking feature from Vowel client
  * Displays real-time indicators for:
- * - User speaking (detected via client-side VAD)
+ * - User speaking (detected via server-side VAD with Deepgram)
  * - AI thinking (processing/tool execution)
  * - AI speaking (delivering audio response)
  */
@@ -54,7 +54,7 @@ export function SpeakingStateDisplay() {
               {state.isUserSpeaking ? 'You are speaking' : 'Not speaking'}
             </div>
             <div className="text-xs text-base-content/50">
-              Client-side VAD • &lt;100ms latency
+              Server-side VAD • &lt;200ms latency
             </div>
           </div>
         </div>

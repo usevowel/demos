@@ -16,8 +16,12 @@ export const selectedDemoConfig = {
   /** Language setting */
   language: 'en-US' as const,
 
-  /** Turn detection preset */
-  turnDetectionPreset: 'client-vad' as const,
+  /**
+   * Turn detection preset
+   * - 'server-vad': Server-side VAD (recommended for vowel-core with Deepgram)
+   * - 'client-vad': Client-side VAD using @ricky0123/vad-web
+   */
+  turnDetectionPreset: 'server-vad' as const,
 
   /** Initial greeting prompt */
   initialGreetingPrompt: 'Hello! I\'m your shopping assistant. How can I help you today?',

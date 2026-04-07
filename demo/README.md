@@ -6,7 +6,7 @@ A comprehensive demo showcasing the vowel.to voice agent integration with React 
 
 This demo now includes **real-time speaking state tracking** with visual indicators!
 
-- 🔵 **User Speaking** - Client-side VAD with <100ms latency
+- 🔵 **User Speaking** - Server-side VAD with Deepgram Nova-3 (<200ms latency)
 - 🟡 **AI Thinking** - Processing and tool execution indicators
 - 🟣 **AI Speaking** - Audio playback tracking
 
